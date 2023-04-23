@@ -74,10 +74,26 @@ final class BaseCalendarManager: CalendarManager, Injectable {
                     .string(from: Double(settingsManager.settings.units == .mmolL ? $0.asMmolL : Decimal($0)) as NSNumber)!
             } ?? "--"
 
-        let title = glucoseText + " " + directionText + " " + deltaText
+        var title = glucoseText + " " + directionText + " " + deltaText
+
+        var visualIndicator = ""
+
+        // get the current range of the last reading then
+        // configure the indicator based on the relevant range
+        switch getBgRange(currentGlucose: glucose) {
+        case .inRange:
+            visualIndicator = CalendarSetting.visualIndicatorInRange
+        case .notUrgent:
+            visualIndicator = CalendarSetting.visualIndicatorNotUrgent
+        case .urgent:
+            visualIndicator = CalendarSetting.visualIndicatorUrgent
+        }
+
+        // pre-append the indicator to the title
+        title = visualIndicator + " " + title
 
         event.title = title
-        event.notes = "iAPS"
+        event.notes = CalendarSetting.createdBy
         event.startDate = Date()
         event.endDate = Date(timeIntervalSinceNow: 60 * 10)
         event.calendar = calendar
@@ -111,6 +127,23 @@ final class BaseCalendarManager: CalendarManager, Injectable {
                 warning(.service, "Cannot remove calendar events", error: error)
             }
         }
+    }
+
+    /// Return the BgRange description/type of the current BgReading value based on the configured objectives
+    private func getBgRange(currentGlucose: BloodGlucose) -> BgRange {
+        // Prepare the bgReading value
+        let bgValue = currentGlucose.glucose?.asMmolL ?? 0
+
+        if bgValue >= 12.8 || bgValue <= 2.8 {
+            return BgRange.urgent
+        }
+
+        if bgValue >= 9.1 || bgValue <= 4.0 {
+            return BgRange.notUrgent
+        }
+
+        // BG is not high or low so considered "in range"
+        return BgRange.inRange
     }
 
     private var glucoseFormatter: NumberFormatter {
