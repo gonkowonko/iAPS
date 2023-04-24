@@ -134,11 +134,11 @@ final class BaseCalendarManager: CalendarManager, Injectable {
         // Prepare the bgReading value
         let bgValue = currentGlucose.glucose?.asMmolL ?? 0
 
-        if bgValue >= 12.8 || bgValue <= 2.8 {
+        if bgValue >= BgRangeMmol.highUrgent || bgValue <= BgRangeMmol.lowUrgent {
             return BgRange.urgent
         }
 
-        if bgValue >= 9.1 || bgValue <= 4.0 {
+        if bgValue > BgRangeMmol.inRangeUpper || bgValue < BgRangeMmol.inRangeLower {
             return BgRange.notUrgent
         }
 

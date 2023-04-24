@@ -107,19 +107,17 @@ struct CurrentGlucoseView: View {
     }
 
     var colorOfGlucose: Color {
-        let whichGlucose = recentGlucose?.glucose ?? 0
+        let whichGlucose = Decimal(recentGlucose?.glucose ?? 0)
+        let bgValue = whichGlucose.asMmolL
 
-        switch whichGlucose {
-        case 71 ... 145:
-            return .loopGreen
-        case 1 ... 55,
-             217...:
+        if bgValue >= BgRangeMmol.highUrgent || bgValue <= BgRangeMmol.lowUrgent {
             return .loopRed
-        case 56 ... 70,
-             146 ... 216:
-            return .loopYellow
-        default:
-            return .primary
         }
+
+        if bgValue > BgRangeMmol.inRangeUpper || bgValue < BgRangeMmol.inRangeLower {
+            return .loopYellow
+        }
+
+        return .loopGreen
     }
 }

@@ -25,3 +25,10 @@ enum BgRange {
     /// bg range is "in range"
     case inRange
 }
+
+enum BgRangeMmol {
+    static let lowUrgent: Decimal = 2.8
+    static let inRangeLower: Decimal = 4.1
+    static let inRangeUpper: Decimal = 9.0
+    static let highUrgent: Decimal = 12.8
+}
