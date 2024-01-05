@@ -96,16 +96,16 @@ extension Home {
                 alwaysUseColors: $state.alwaysUseColors
             )
             .onTapGesture {
-                if state.alarm == nil {
-                    state.openCGM()
-                } else {
+                if state.alarm != nil && state.settingsManager.settings.enableGlucoseLowHighNotifications {
                     state.showModal(for: .snooze)
+                } else {
+                    state.openCGM()
                 }
             }
             .onLongPressGesture {
                 let impactHeavy = UIImpactFeedbackGenerator(style: .heavy)
                 impactHeavy.impactOccurred()
-                if state.alarm == nil {
+                if state.alarm == nil && state.settingsManager.settings.enableGlucoseLowHighNotifications {
                     state.showModal(for: .snooze)
                 } else {
                     state.openCGM()

@@ -194,6 +194,8 @@ final class BaseUserNotificationsManager: NSObject, UserNotificationsManager, In
             return
         }
 
+        guard settingsManager.settings.enableGlucoseLowHighNotifications else { return }
+
         ensureCanSendNotification {
             var titles: [String] = []
             var notificationAlarm = false

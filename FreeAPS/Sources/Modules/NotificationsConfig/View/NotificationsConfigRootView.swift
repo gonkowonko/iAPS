@@ -29,6 +29,7 @@ extension NotificationsConfig {
                 Section(header: Text("Glucose")) {
                     Toggle("Show glucose on the app badge", isOn: $state.glucoseBadge)
                     Toggle("Always Notify Glucose", isOn: $state.glucoseNotificationsAlways)
+                    Toggle("Enable glucose high/low notifications", isOn: $state.enableGlucoseLowHighNotifications)
                     Toggle("Also play alert sound", isOn: $state.useAlarmSound)
                     Toggle("Also add source info", isOn: $state.addSourceInfoToGlucoseNotifications)
 

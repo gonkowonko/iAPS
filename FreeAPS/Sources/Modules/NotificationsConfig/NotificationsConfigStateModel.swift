@@ -10,6 +10,7 @@ extension NotificationsConfig {
         @Published var highGlucose: Decimal = 0
         @Published var carbsRequiredThreshold: Decimal = 0
         @Published var useLiveActivity = false
+        @Published var enableGlucoseLowHighNotifications = true
         var units: GlucoseUnits = .mmolL
 
         override func subscribe() {
@@ -43,6 +44,10 @@ extension NotificationsConfig {
                 \.carbsRequiredThreshold,
                 on: $carbsRequiredThreshold
             ) { carbsRequiredThreshold = $0 }
+
+            subscribeSetting(\.enableGlucoseLowHighNotifications, 
+                              on: $enableGlucoseLowHighNotifications) {
+                enableGlucoseLowHighNotifications = $0 }
         }
     }
 }
